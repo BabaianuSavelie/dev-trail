@@ -1,0 +1,58 @@
+﻿@using System.Web;
+@using dev_trail.Data.Entities
+@model List<Post>;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="grid grid-cols-6 gap-2 my-4">
+    <aside class="relative hidden lg:block col-span-2">
+        <ul class="bg-gray-200 rounded-lg p-5 sticky top-0">
+            Side navigation
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+            <li>Item 4</li>
+        </ul>
+    </aside>
+
+    <main class="col-span-6 lg:col-span-4">
+
+        @foreach (var post in @Model)
+        {
+            <div class="card bg-base-100 shadow-xl mb-4">
+                <div class="card-body">
+                    <div class="flex gap-2 items-center">
+                        <div class="avatar placeholder">
+                            <div class="bg-neutral-focus text-neutral-content rounded-full aspect-square w-10">
+                                <span class="text-xl">BS</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="">@post.Author.UserName</h4>
+                            <span class="text-sm text-slate-400">@post.CreatedAt.ToString("M")</span>
+                        </div>
+                    </div>
+
+                    <div class="my-2">
+                        @foreach (var tag in post.Tags)
+                        {
+                            <span class="bg-yellow-100 py-1 px-2 rounded-lg hover:bg-yellow-50">#@tag.Name</span>
+                        }
+                    </div>
+                    <h2 class="card-title text-3xl font-bold hover:text-slate-600">
+                        @*                         <a href="@Url.Action("Post", "Posts", new { username = post.Author.UserName, id = HttpUtility.UrlEncode(post.Slug) })">@post.Title</a> *@
+                        <a href=@($"/{post.Author.UserName}/{HttpUtility.UrlEncode(post.Slug)}")>@post.Title</a>
+                    </h2>
+                    <div class="card-actions my-2">
+                        <a href=@($"/{post.Author.UserName}/{HttpUtility.UrlEncode(post.Slug)}/#comments") class="btn btn-sm capitalize">
+                            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" class="crayons-icon"><path d="M10.5 5h3a6 6 0 110 12v2.625c-3.75-1.5-9-3.75-9-8.625a6 6 0 016-6zM12 15.5h1.5a4.501 4.501 0 001.722-8.657A4.5 4.5 0 0013.5 6.5h-3A4.5 4.5 0 006 11c0 2.707 1.846 4.475 6 6.36V15.5z"></path></svg>
+                            @post.Comments.Count()
+                            Comments
+                        </a>
+                    </div>
+                </div>
+            </div> 
+        }
+    </main>
+</div>
